@@ -1,5 +1,9 @@
 resource "snowflake_role" "role" {
   name = var.name
+
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 resource "snowflake_role_grants" "role_grants" {
@@ -11,6 +15,10 @@ resource "snowflake_role_grants" "role_grants" {
   warehouse_privileges {
     warehouse_name = var.warehouse_name
     privilege      = var.warehouse_privilege
+  }
+
+  lifecycle {
+    ignore_changes = all
   }
 }
 
