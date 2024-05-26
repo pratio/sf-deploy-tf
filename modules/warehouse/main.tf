@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    snowflake = {
+      source  = "Snowflake-Labs/snowflake"
+      version = "~> 0.76"
+    }
+  }
+}
+
+
 resource "snowflake_warehouse" "warehouse" {
   name                        = var.name
   warehouse_size              = var.size

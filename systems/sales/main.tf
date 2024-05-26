@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    snowflake = {
+      source  = "Snowflake-Labs/snowflake"
+      version = "~> 0.76"
+    }
+  }
+}
+
+
 module "sales_database" {
   source = "../../modules/database"
   name   = "EXT_SALESFORCE_DB"
