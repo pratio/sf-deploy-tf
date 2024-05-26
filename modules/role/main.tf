@@ -1,12 +1,3 @@
-terraform {
-  required_providers {
-    snowflake = {
-      source  = "Snowflake-Labs/snowflake"
-      version = "~> 0.76"
-    }
-  }
-}
-
 resource "snowflake_role" "role" {
   name = var.name
 
@@ -16,9 +7,11 @@ resource "snowflake_role" "role" {
 }
 
 resource "snowflake_role_grants" "database_grant" {
-  role_name     = snowflake_role.role.name
-  database_name = var.database_name
-  privilege     = var.database_privilege
+  role_name = snowflake_role.role.name
+  object_type = "database"
+  object_name = var.database_name
+
+  privileges = [var.database_privilege]
 
   lifecycle {
     ignore_changes = all
@@ -26,9 +19,11 @@ resource "snowflake_role_grants" "database_grant" {
 }
 
 resource "snowflake_role_grants" "warehouse_grant" {
-  role_name      = snowflake_role.role.name
-  warehouse_name = var.warehouse_name
-  privilege      = var.warehouse_privilege
+  role_name = snowflake_role.role.name
+  object_type = "warehouse"
+  object_name = var.warehouse_name
+
+  privileges = [var.warehouse_privilege]
 
   lifecycle {
     ignore_changes = all
