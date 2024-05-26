@@ -14,6 +14,7 @@ provider "snowflake" {
 
 module "sales" {
   source = "../../systems/sales"
+  snowflake_role = var.snowflake_role
 }
 
 
