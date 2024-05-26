@@ -15,16 +15,20 @@ resource "snowflake_role" "role" {
   }
 }
 
-resource "snowflake_role_grants" "role_grants" {
-  role_name = snowflake_role.role.name
+resource "snowflake_role_grants" "database_grant" {
+  role_name     = snowflake_role.role.name
+  database_name = var.database_name
+  privilege     = var.database_privilege
 
-  for_each = toset([
-    "USAGE on DATABASE ${var.database_name}",
-    "USAGE on WAREHOUSE ${var.warehouse_name}",
-  ])
+  lifecycle {
+    ignore_changes = all
+  }
+}
 
-  privilege = split(" ", each.key)[0]
-  on = join(" ", slice(split(" ", each.key), 2, length(split(" ", each.key))))
+resource "snowflake_role_grants" "warehouse_grant" {
+  role_name      = snowflake_role.role.name
+  warehouse_name = var.warehouse_name
+  privilege      = var.warehouse_privilege
 
   lifecycle {
     ignore_changes = all
