@@ -17,14 +17,14 @@ resource "snowflake_role" "role" {
 
 resource "snowflake_role_grants" "role_grants" {
   role_name = snowflake_role.role.name
-  database_privileges = [{
-    database_name = var.database_name
-    privilege     = var.database_privilege
-  }]
-  warehouse_privileges = [{
-    warehouse_name = var.warehouse_name
-    privilege      = var.warehouse_privilege
-  }]
+
+  for_each = toset([
+    "USAGE on DATABASE ${var.database_name}",
+    "USAGE on WAREHOUSE ${var.warehouse_name}",
+  ])
+
+  privilege = split(" ", each.key)[0]
+  on = join(" ", slice(split(" ", each.key), 2, length(split(" ", each.key))))
 
   lifecycle {
     ignore_changes = all
